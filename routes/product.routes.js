@@ -5,7 +5,7 @@ import { isAuth } from "../middlewares/auth.middlewares.js";
 
 
 
-const productRoutes = express.Router(); 
+const productRoutes = express.Router();
 
 productRoutes.get("/get-all", getAllProduct)
 

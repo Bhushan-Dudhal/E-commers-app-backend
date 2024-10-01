@@ -64,24 +64,40 @@ export const getSingleProduct = async (req, res,) => {
 }
 
 export const CreateProduct = async (req, res) => {
+    
     try {
         const { name, description, price, category, stock } = req.body;
 
-        if (!name || !description || !price || !category || !stock) {
-            return res.status(400).json({
-                success: false,
-                message:"Please provide all fields"
-            })
-        }
+        // if (!name || !description || !price || !category || !stock) {
+        //     return res.status(400).json({
+        //         success: false,
+        //         message:"Please provide all fields"
+        //     })
+        // }
 
+        if (!req.file) {
+            return res.status(500).json({
+                success: false,
+                message: 'Please upload image'
+                
+             })
+         }
         const file = getDataUri(req.file);
         const cdb = await cloudinary.v2.uploader.upload(file.content);
         const image = {
             public_id: cdb.public_id,
             url:cdb.secure_url
         }
+        
 
-  await productModel.create
+        await productModel.create({
+      name,description,price,category,stock,images:[image]
+        })
+        
+        res.status(201).json({
+            success: true,
+            message: 'Product created successfully',
+        })
     } catch (error) {
         console.log('Error While cretae product',error);
         
