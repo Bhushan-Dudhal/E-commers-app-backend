@@ -1,6 +1,8 @@
 import express from "express";
-import { CreateProduct, getAllProduct, getSingleProduct } from "../controllers/product.controllers.js";
+import { CreateProduct, DeleteProductsImage, getAllProduct, getSingleProduct, UpdateProductCon, UpdateProductImage, } from "../controllers/product.controllers.js";
 import { isAuth } from "../middlewares/auth.middlewares.js";
+import { singleupload } from "../middlewares/multer.js";
+
 
 
 
@@ -12,7 +14,15 @@ productRoutes.get("/get-all", getAllProduct)
 
 productRoutes.get("/:id", getSingleProduct)
 
-productRoutes.post("/create", isAuth,CreateProduct)
+productRoutes.post("/create",  singleupload, CreateProduct)
+
+productRoutes.put("/:id", isAuth, UpdateProductCon)
+
+productRoutes.put("/image/:id", isAuth, singleupload, UpdateProductImage)
+
+productRoutes.delete("/delete-image/:id", isAuth, DeleteProductsImage)
+
+
 
 
 

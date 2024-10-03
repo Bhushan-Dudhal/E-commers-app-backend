@@ -9,7 +9,6 @@ export const isAuth = async (req, res, next) => {
 
         const { token } = req.cookies;
         
-        console.log(token);
         
                                                                                                       
 
@@ -20,7 +19,6 @@ export const isAuth = async (req, res, next) => {
         const decode = jwt.verify(token, process.env.SECRET_KEY);
 
         const user = await userModel.findById(decode._id)
-        console.log(user);
         
         if (!user) {
             return next(errorHandlers(404, "Invalid Cookies id"))

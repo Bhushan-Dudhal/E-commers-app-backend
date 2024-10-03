@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 
 const prodctSchema = new mongoose.Schema({
- 
     name: {
         type: String,
         required: [true, "product name is requred"]
@@ -9,7 +8,7 @@ const prodctSchema = new mongoose.Schema({
     description: {
         type: String,
         required: [true, "product description is requred"]
-       
+
     },
     price: {
         type: Number,
@@ -18,23 +17,20 @@ const prodctSchema = new mongoose.Schema({
     stock: {
         type: Number,
         required: [true, "product stock is requred"],
-        
+
     },
     category: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Category'
-        
-        
     },
-    
     images: [
         {
             public_id: String,
             url: String
         }
     ]
-},{timestamps:true})
+}, { timestamps: true })
 
 
 
-export const productModel = mongoose.model("product", prodctSchema);
+export const productModel = mongoose.model("productModel", prodctSchema);
