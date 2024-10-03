@@ -237,3 +237,4 @@ export const DeleteProductsImage = async (req, res, next) => {
 
     }
 }
+
