@@ -8,7 +8,7 @@ export const createCategory = async (req, res, next) => {
     try {
         const { category } = req.body;
 
-        if(!category){
+        if (!category) {
             return next(errorHandlers(404, "Category is required"))
 
         }
@@ -18,14 +18,14 @@ export const createCategory = async (req, res, next) => {
         })
 
         res.status(201).json({
-            success:true,
-            message:`${category} Category created successfully`
+            success: true,
+            message: `${category} Category created successfully`
         })
-        
-        
+
+
     } catch (error) {
-     console.log('Error While create category',error);
-        
+        console.log('Error While create category', error);
+
     }
 }
 export const getAll = async (req, res, next) => {
@@ -34,38 +34,38 @@ export const getAll = async (req, res, next) => {
         res.status(201).json({
             success: true,
             message: "category get successfully",
-            totalCat:categorys.length,
+            totalCat: categorys.length,
             categorys
         })
-        
+
     } catch (error) {
 
-        console.log('Error While get category', error); 
+        console.log('Error While get category', error);
     }
 }
 
 export const DeleteCat = async (req, res, next) => {
     try {
         const category = await CategoryModel.findById(req.params.id)
-        
+
         if (!category) {
-            return next(errorHandlers(404,"category not found"))
+            return next(errorHandlers(404, "category not found"))
         }
-        const products =await productModel.find({category:category._id})
-        
-        for (let i = 0; i < products.length; i++){
+        const products = await productModel.find({ category: category._id })
+
+        for (let i = 0; i < products.length; i++) {
             const product = products[i]
             product.category = undefined
-           await  product.save()
+            await product.save()
         }
         res.status(200).json({
             success: true,
-            message:"categgory deleted successfully"
+            message: "categgory deleted successfully"
         })
 
-       await  category.deleteOne()
+        await category.deleteOne()
     } catch (error) {
         console.log('Error While delete category', error);
-
+        next(error.message);
     }
 }
