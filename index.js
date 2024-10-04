@@ -7,6 +7,7 @@ import { errorMiddlewares } from "./middlewares/error.middlewars.js";
 const app = express();
 import cloudinary from "cloudinary"
 import productRoutes from "./routes/product.routes.js";
+import categoryRoutes from "./routes/category.routes.js";
 config({ path: "./config/.env" });
 
 //MIddlewares
@@ -24,6 +25,7 @@ cloudinary.v2.config({
 
 app.use("/api/user",routes)
 app.use("/api/product", productRoutes)
+app.use("/api/cat",categoryRoutes)
 
 
 //Server

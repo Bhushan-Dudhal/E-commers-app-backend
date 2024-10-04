@@ -162,7 +162,6 @@ export const UpdateProductCon = async (req, res, next) => {
 
 export const UpdateProductImage = async (req, res, next) => {
     try {
-        console.log('welcome');
 
         const product = await productModel.findById(req.params.id)
 
@@ -235,6 +234,34 @@ export const DeleteProductsImage = async (req, res, next) => {
 
         console.log('Error While product updated', error);
 
+    }
+}
+
+export const DeleteProduct = async (req, res, next) => {
+    try {
+        
+        const product = await productModel.findById(req.params.id)
+        
+        if (!product) {
+            return next(errorHandlers(400, "product not found"));
+        }
+            for (let index = 0; index < product.images.length; index++){
+                await cloudinary.v2.uploader.destroy(product.images[index].public_id);
+            }
+            await product.deleteOne();
+            res.status(201).json({
+                success: true,
+                message: "Product Deleted Successfully",
+            })
+        
+    } catch (error) {
+
+        console.log("Error While delete product", error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Error  In delete product Api'
+        }) 
     }
 }
 

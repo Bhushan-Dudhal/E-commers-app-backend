@@ -1,5 +1,5 @@
 import express from "express";
-import { CreateProduct, DeleteProductsImage, getAllProduct, getSingleProduct, UpdateProductCon, UpdateProductImage, } from "../controllers/product.controllers.js";
+import { CreateProduct, DeleteProduct, DeleteProductsImage, getAllProduct, getSingleProduct, UpdateProductCon, UpdateProductImage, } from "../controllers/product.controllers.js";
 import { isAuth } from "../middlewares/auth.middlewares.js";
 import { singleupload } from "../middlewares/multer.js";
 
@@ -21,6 +21,9 @@ productRoutes.put("/:id", isAuth, UpdateProductCon)
 productRoutes.put("/image/:id", isAuth, singleupload, UpdateProductImage)
 
 productRoutes.delete("/delete-image/:id", isAuth, DeleteProductsImage)
+
+productRoutes.delete("/delete-product/:id", isAuth, DeleteProduct)
+
 
 
 
