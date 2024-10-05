@@ -69,3 +69,44 @@ export const DeleteCat = async (req, res, next) => {
         next(error.message);
     }
 }
+
+export const CategoryUpdate = async (req, res, next) => {
+    try {
+        const category = await CategoryModel.findById(req.params.id)
+
+        if (!category) {
+            return next(errorHandlers(404,"category not found"))
+        }
+
+        const products = await productModel.find({ category: category._id });
+
+        const { UpdateCategory } =req.body
+        for (let i = 0; i < products.length; i++) {
+            const product = products[i]
+            product.category =UpdateCategory;
+            await product.save()
+        }
+        if (UpdateCategory) category.category = UpdateCategory;
+        await category.save()
+        res.status(200).json({
+            success: true,
+            message:"Category updated successfully"
+        })
+  } catch (error) {
+        console.log('Error while category upadte', error);
+
+        if (error.name === "CastError") {
+            return res.status(500).send({
+                success: false,
+                message: "Invalid Id",
+            });
+        }
+        res.status(500).send({
+            success: false,
+            message: "Error In DELETE CAT API",
+            error,
+        });
+    
+    
+  }
+}

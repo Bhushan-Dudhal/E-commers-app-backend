@@ -14,7 +14,7 @@ productRoutes.get("/get-all", getAllProduct)
 
 productRoutes.get("/:id", getSingleProduct)
 
-productRoutes.post("/create",  singleupload, CreateProduct)
+productRoutes.post("/create",isAuth,  singleupload, CreateProduct)
 
 productRoutes.put("/:id", isAuth, UpdateProductCon)
 

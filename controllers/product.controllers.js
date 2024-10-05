@@ -66,7 +66,7 @@ export const getSingleProduct = async (req, res,) => {
 
 export const CreateProduct = async (req, res) => {
     try {
-        const { name, description, price, category, stock } = req.body;
+        const { name, description, price, category, stock, quantity } = req.body;
 
         // Validate required fields
         // if (!name || !description || !price || !category || !stock) {
@@ -102,8 +102,9 @@ export const CreateProduct = async (req, res) => {
             description,
             price,
             category,
+            quantity,
             stock,
-            images: [image],
+            images:[image],
         });
 
         // Return success response

@@ -19,6 +19,11 @@ const prodctSchema = new mongoose.Schema({
         required: [true, "product stock is requred"],
 
     },
+    quantity: {
+        type: Number,
+        required: [true, "product quantity is requred"],
+
+    },
     category: {
         type:mongoose.Schema.Types.ObjectId,
         ref:'category'
@@ -33,4 +38,4 @@ const prodctSchema = new mongoose.Schema({
 
 
 
-export const productModel = mongoose.model("productModel", prodctSchema);
+export const productModel = mongoose.model("Products", prodctSchema);
