@@ -32,3 +32,23 @@ export const isAuth = async (req, res, next) => {
         console.log(`Error While use auth ${error}`);
     }
 }
+
+//admin auth
+
+
+export const isAdmin = async (req, res, next) => {
+    try {
+
+        if (req.user.role !== 'admin') {
+            return res.status(404).json({
+                status: false,
+                message: "You are not an admin",
+            })
+        }
+           
+        next()
+    } catch (error) {
+       console.log(`Error While is Admin Auth ${error}`);
+        
+    }
+}

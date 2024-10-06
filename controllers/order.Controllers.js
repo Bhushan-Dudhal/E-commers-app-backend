@@ -1,19 +1,14 @@
+import { stripe } from "../index.js";
 import { orderModel } from "../models/orderModel.js";
 import { productModel } from "../models/productModel.js";
-
-
 
 
 export const createOrder = async (req, res, next) => {
     try {
         const { shipingInfo, orderItems, paymentMethod, paymentInfo, itemPrice, tax, shippingCharges, totalAmout, orderStatus } = req.body;
-
-
         // if (!shipingInfo || !orderItems || !paymentMethod || !paymentInfo || !itemPrice || tax || !shippingCharges ||!totalAmout||!orderStatus) {
         //     return next(errorHandlers(404, "all filid is required"));
         // }
-
-
         await orderModel.create({
             user: req.user._id,
             shipingInfo, orderItems, paymentMethod, paymentInfo, itemPrice, tax, shippingCharges, totalAmout, orderStatus
@@ -21,31 +16,20 @@ export const createOrder = async (req, res, next) => {
         for (let i = 0; i < orderItems.length; i++) {
             const product = await productModel.findById(orderItems[i].product);
             product.stock -= orderItems[i].quantity;
-
             await product.save()
-
-
-
-
         }
-
         res.status(201).json({
             success: true,
             message: "order placed   successfully",
-
         })
-
     } catch (error) {
         console.log("Error While create order :", error);
-
-        
         res.status(500).json({
             success: false,
             message: 'Error  In  create order  Api'
         })
     }
 }
-
 
 export const myOrders = async (req, res, next) => {
     try {
@@ -56,7 +40,6 @@ export const myOrders = async (req, res, next) => {
                 message: "User not authenticated"
             });
         }
-
         const orders = await orderModel.find({ user: req.user._id });
 
         if (!orders || orders.length === 0) {
@@ -65,7 +48,6 @@ export const myOrders = async (req, res, next) => {
                 message: "No orders found for this user"
             });
         }
-
         res.status(200).json({
             success: true,
             message: "User's orders fetched successfully",
@@ -84,7 +66,7 @@ export const myOrders = async (req, res, next) => {
 export const singleOrder = async (req, res) => {
     try {
         const order = await orderModel.findById(req.params.id)
-        
+
         if (!order) {
             return res.status(404).json({
                 success: false,
@@ -97,7 +79,7 @@ export const singleOrder = async (req, res) => {
             message: "Order fetched successfully",
             order
         })
-        
+
     } catch (error) {
         console.error("Error in single order API:", error);
 
@@ -113,3 +95,53 @@ export const singleOrder = async (req, res) => {
         });
     }
 }
+export const PymentsCon = async (req, res) => {
+    try {
+        const { totalAmount } = req.body;
+        console.log("Payment amount: ", totalAmount);
+
+        // Validate totalAmount
+        if (!totalAmount || isNaN(totalAmount) || totalAmount <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid amount provided',
+            });
+        }
+        // Convert totalAmount to the smallest currency unit (cents)
+        const amountInCents = Math.round(Number(totalAmount) * 100);
+
+        // Create payment intent with validated and converted amount
+        const { client_secret } = await stripe.paymentIntents.create({
+            amount: amountInCents, // Ensure it's an integer (in cents)
+            currency: 'usd',
+        });
+
+        res.status(201).json({
+            success: true,
+            message: "Payment intent created successfully",
+            client_secret
+        });
+    } catch (error) {
+        console.error("Error in payment order API:", error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Error creating payment order',
+        });
+    }
+};
+
+export const getAllOrders = async (req, res, next) => {
+    
+    try {
+        
+    } catch (error) {
+        console.error("Error in admin order API:", error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Error creating admin order',
+        });
+    }
+}
+

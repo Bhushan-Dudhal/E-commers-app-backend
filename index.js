@@ -10,11 +10,21 @@ import productRoutes from "./routes/product.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import orderRoutes from "./routes/order.routes.js";
 config({ path: "./config/.env" });
+import cors from "cors"
+import Stripe from "stripe"
 
 //MIddlewares
 database();
 app.use(express.json());
 app.use(cookieParser());
+app.use(cors())
+
+//stripe
+
+export const stripe = new Stripe(process.env.STRIPE_API_SECRET)
+
+
+
 cloudinary.v2.config({
     cloud_name: process.env.KEY_NAME,
     api_key: process.env.API_KEY,
