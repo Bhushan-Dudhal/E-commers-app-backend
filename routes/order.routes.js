@@ -1,4 +1,4 @@
-import { createOrder, getAllOrders, myOrders, PymentsCon, singleOrder } from "../controllers/order.Controllers.js";
+import { ChangeOrderStatus, createOrder, getAllOrders, myOrders, PymentsCon, singleOrder } from "../controllers/order.Controllers.js";
 import { isAdmin, isAuth } from "../middlewares/auth.middlewares.js";
 import express  from "express";
 
@@ -20,10 +20,14 @@ orderRoutes.post("/payment", isAuth, PymentsCon)
 
 //admin panel
 
-orderRoutes.get("/admin/get-all-orders",isAuth,isAdmin,getAllOrders)
+orderRoutes.get("/admin/get-all-orders", isAuth, isAdmin, getAllOrders);
+
+//change order status
+
+orderRoutes.put("/admin/order/:id",isAdmin,isAdmin,ChangeOrderStatus)
 
 
-
+            
 
 
 

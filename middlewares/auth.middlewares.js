@@ -8,9 +8,9 @@ export const isAuth = async (req, res, next) => {
     try {
 
         const { token } = req.cookies;
-        
-        
-                                                                                                      
+
+
+
 
         if (!token) {
             return next(errorHandlers(401, "You must be logged in to access this"));
@@ -19,13 +19,13 @@ export const isAuth = async (req, res, next) => {
         const decode = jwt.verify(token, process.env.SECRET_KEY);
 
         const user = await userModel.findById(decode._id)
-        
+
         if (!user) {
             return next(errorHandlers(404, "Invalid Cookies id"))
         }
 
-        req.user=user;
-        
+        req.user = user;
+
         next()
 
     } catch (error) {
@@ -45,10 +45,10 @@ export const isAdmin = async (req, res, next) => {
                 message: "You are not an admin",
             })
         }
-           
+
         next()
     } catch (error) {
-       console.log(`Error While is Admin Auth ${error}`);
-        
+        console.log(`Error While is Admin Auth ${error}`);
+
     }
 }

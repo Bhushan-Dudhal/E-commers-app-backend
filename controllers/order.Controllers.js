@@ -134,6 +134,15 @@ export const PymentsCon = async (req, res) => {
 export const getAllOrders = async (req, res, next) => {
     
     try {
+
+        const orders = await orderModel.find({})
+        
+        res.status(200).json({
+            success: true,
+            message: "Orders retrieved successfully",
+            totalOrders: orders.length,
+            orders
+        })
         
     } catch (error) {
         console.error("Error in admin order API:", error);
@@ -141,6 +150,51 @@ export const getAllOrders = async (req, res, next) => {
         res.status(500).json({
             success: false,
             message: 'Error creating admin order',
+        });
+    }
+}
+
+
+
+export const ChangeOrderStatus = async (req, res, next) => {
+    try {
+        const order = await orderModel.findById(req.params.id);
+        if (!order) {
+            return res.status(404).json({
+                success: false,
+                message: 'Order not found',
+            })
+        }
+
+        if (order.orderStatus === "processing") order.orderStatus = "shipped"
+        else if (order.orderStatus === "shipped") {
+            order.orderStatus = "deliverd"
+            order.deliverdAt =Date.now()
+        } else {
+            return res.status(500).json({
+                success: false,
+                message:"order alredy deliverd"
+            })
+        }
+        await order.save();
+        res.status(200).json({
+            success: true,
+            message:"order status updated"
+        })
+        
+    } catch (error) {
+        console.error("Error in change order status API:", error);
+
+        if (error.name === "CastError") {
+            return res.status(500).send({
+                success: false,
+                message: "Invalid Id",
+            });
+        }
+
+        res.status(500).json({
+            success: false,
+            message: 'Error creating  order status',
         });
     }
 }
