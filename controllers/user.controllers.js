@@ -2,7 +2,7 @@ import { userModel } from "../models/user.models.js";
 import { errorHandlers } from "../utils/error.handles.js";
 import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { getDataUri } from "../utils/feature.js"; 
+import { getDataUri } from "../utils/feature.js";
 import cloudinary from "cloudinary"
 
 
@@ -13,9 +13,9 @@ import cloudinary from "cloudinary"
 export const RegisterPOST = async (req, res, next) => {
     try {
 
-        const { name, email, password, address, phone } = req.body;
+        const { name, email, password, address, phone, answer } = req.body;
 
-        if (!name || !email || !password || !address || !phone) {
+        if (!name || !email || !password || !address || !phone || !answer) {
             return next(errorHandlers(500, "Please Provide All Fields"));
 
 
@@ -29,7 +29,7 @@ export const RegisterPOST = async (req, res, next) => {
         const hash = bcryptjs.hashSync(password, 10)
 
         const users = await userModel.create({
-            name, email, password: hash, address, phone
+            name, email, password: hash, address, phone, answer
         })
 
         return res.status(201).json({
@@ -51,19 +51,19 @@ export const LoginPOST = async (req, res, next) => {
             return next(errorHandlers(500, "Please Provide All Fields"));
         }
 
-        const validUsr = await userModel.findOne({email})
-        console.log("hello",validUsr);
+        const validUsr = await userModel.findOne({ email })
+        console.log("hello", validUsr);
 
         if (!validUsr) {
             return next(errorHandlers(400, "User Not Found"))
         }
 
-        const isMatch = bcryptjs.compareSync(password,validUsr.password)
+        const isMatch = bcryptjs.compareSync(password, validUsr.password)
         if (!isMatch) {
             return next(errorHandlers(400, "Invalid Password or Email"))
         }
 
-        const token = jwt.sign({ _id:validUsr._id },process.env.SECRET_KEY);
+        const token = jwt.sign({ _id: validUsr._id }, process.env.SECRET_KEY);
         console.log(token);
 
 
@@ -198,3 +198,48 @@ export const profilePicture = async (req, res, next) => {
     }
 };
 
+
+
+export const passwordResetCon = async (req, res) => {
+    try {
+        const { email, NewPassword, answer } = req.body;
+        if (!email || !NewPassword || !answer) {
+            return res.status(500).json({
+                success: false,
+                message: "please all fields"
+            })
+        }
+
+        const user = await userModel.findOne({ email, answer })
+
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: 'Invalid user or answer'
+            })
+        }
+
+
+        const newpassword = bcryptjs.hashSync(user.password, 10);
+        user.password = newpassword;
+
+
+
+        console.log(user.password);
+
+
+        await user.save();
+
+        res.status(201).json({
+            success: true,
+            message: "Your password Has Been Reset  Please Login !"
+        })
+    } catch (error) {
+        console.error("Error while  password reset", error);
+        res.status(500).json({
+            success: false,
+            message: " Error password reset  API",
+            error: error.message || error
+        });
+    }
+}

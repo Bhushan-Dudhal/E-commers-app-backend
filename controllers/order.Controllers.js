@@ -169,7 +169,7 @@ export const ChangeOrderStatus = async (req, res, next) => {
         if (order.orderStatus === "processing") order.orderStatus = "shipped"
         else if (order.orderStatus === "shipped") {
             order.orderStatus = "deliverd"
-            order.deliverdAt =Date.now()
+            order.deliverdAt = Date.now()
         } else {
             return res.status(500).json({
                 success: false,
