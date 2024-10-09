@@ -269,6 +269,7 @@ export const DeleteProduct = async (req, res, next) => {
 
 export const ProductReview = async (req, res, next) => {
     try {
+        const product =await productModel.findOne()
         
     } catch (error) {
         console.log("Error While product review", error);
