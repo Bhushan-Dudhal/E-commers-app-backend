@@ -1,5 +1,24 @@
 import mongoose from "mongoose";
 
+//reviel model
+
+const revielSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: [true," name is requred"]
+    },
+    rating: {
+        type: Number,
+        default:0
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: [true," User is requred"]
+    }
+},{timestamps:true})
+
+
 const prodctSchema = new mongoose.Schema({
     name: {
         type: String,
@@ -33,7 +52,16 @@ const prodctSchema = new mongoose.Schema({
             public_id: String,
             url: String
         }
-    ]
+    ],
+    reviews: [revielSchema],
+    rating: {
+        type: Number,
+        default:0
+    },
+    numReviews: {
+        type: Number,
+        default:0
+    }
 }, { timestamps: true })
 
 

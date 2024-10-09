@@ -266,3 +266,17 @@ export const DeleteProduct = async (req, res, next) => {
     }
 }
 
+
+export const ProductReview = async (req, res, next) => {
+    try {
+        
+    } catch (error) {
+        console.log("Error While product review", error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Error  In product review Api'
+        })  
+    }
+}
+  

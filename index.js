@@ -34,15 +34,15 @@ cloudinary.v2.config({
 
 //Routes
 
-app.use("/api/user",routes)
+app.use("/api/user", routes)
 app.use("/api/product", productRoutes)
 app.use("/api/cat", categoryRoutes)
-app.use("/api/order",orderRoutes)
+app.use("/api/order", orderRoutes)
 
 
 //Server
 app.use(errorMiddlewares)
 app.listen(process.env.PORT, () => {
     console.log(`Server is Running on http://localhost:${process.env.PORT}`);
-    
+
 })
