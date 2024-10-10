@@ -10,7 +10,7 @@ export const getAllProduct = async (req, res, next) => {
     const { keyword, category } = req.query;
     try {
         const products = await productModel.find({
-            name: {
+            name:{
                 $regex: keyword ? keyword : '',
                 $options: 'i',
             },
