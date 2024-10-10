@@ -52,8 +52,7 @@ export const LoginPOST = async (req, res, next) => {
         }
 
         const validUsr = await userModel.findOne({ email })
-        console.log("hello", validUsr);
-
+        
         if (!validUsr) {
             return next(errorHandlers(400, "User Not Found"))
         }

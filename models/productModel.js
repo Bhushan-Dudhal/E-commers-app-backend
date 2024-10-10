@@ -3,13 +3,16 @@ import mongoose from "mongoose";
 //reviel model
 
 const revielSchema = new mongoose.Schema({
-    name: {
+    name:{
         type: String,
         required: [true," name is requred"]
     },
-    rating: {
+    rating:{
         type: Number,
         default:0
+    },
+    comment:{
+       type:String 
     },
     user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -62,7 +65,7 @@ const prodctSchema = new mongoose.Schema({
         type: Number,
         default:0
     }
-}, { timestamps: true })
+}, {timestamps:true})
 
 
 

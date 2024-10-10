@@ -6,12 +6,21 @@ import getDataUri from "../utils/feature.js";
 
 
 export const getAllProduct = async (req, res, next) => {
-    try {
 
-        const products = await productModel.find({})
+    const { keyword, category } = req.query;
+    try {
+        const products = await productModel.find({
+            name: {
+                $regex: keyword ? keyword : '',
+                $options: 'i',
+            },
+
+            category:category?category:undefined
+        }).populate("category")
         res.status(201).json({
             success: true,
             message: 'all product fetched success',
+            totalProducts: products.length,
             products
         })
 
@@ -24,6 +33,9 @@ export const getAllProduct = async (req, res, next) => {
         })
     }
 }
+
+
+
 
 export const getSingleProduct = async (req, res,) => {
     try {
@@ -69,12 +81,12 @@ export const CreateProduct = async (req, res) => {
         const { name, description, price, category, stock, quantity } = req.body;
 
         // Validate required fields
-        // if (!name || !description || !price || !category || !stock) {
-        //     return res.status(400).json({
-        //         success: false,
-        //         message: "Please provide all required fields",
-        //     });
-        // }
+        if (!name || !description || !price || !stock) {
+            return res.status(400).json({
+                success: false,
+                message: "Please provide all required fields",
+            });
+        }
 
         // Check if file is uploaded
         if (!req.file) {
@@ -104,7 +116,7 @@ export const CreateProduct = async (req, res) => {
             category,
             quantity,
             stock,
-            images:[image],
+            images: [image],
         });
 
         // Return success response
@@ -116,7 +128,7 @@ export const CreateProduct = async (req, res) => {
 
     } catch (error) {
         // Log and handle errors
-        console.error( error);
+        console.error(error);
 
         return res.status(500).json({
             success: false,
@@ -240,21 +252,21 @@ export const DeleteProductsImage = async (req, res, next) => {
 
 export const DeleteProduct = async (req, res, next) => {
     try {
-        
+
         const product = await productModel.findById(req.params.id)
-        
+
         if (!product) {
             return next(errorHandlers(400, "product not found"));
         }
-            for (let index = 0; index < product.images.length; index++){
-                await cloudinary.v2.uploader.destroy(product.images[index].public_id);
-            }
-            await product.deleteOne();
-            res.status(201).json({
-                success: true,
-                message: "Product Deleted Successfully",
-            })
-        
+        for (let index = 0; index < product.images.length; index++) {
+            await cloudinary.v2.uploader.destroy(product.images[index].public_id);
+        }
+        await product.deleteOne();
+        res.status(201).json({
+            success: true,
+            message: "Product Deleted Successfully",
+        })
+
     } catch (error) {
 
         console.log("Error While delete product", error);
@@ -262,22 +274,51 @@ export const DeleteProduct = async (req, res, next) => {
         res.status(500).json({
             success: false,
             message: 'Error  In delete product Api'
-        }) 
+        })
     }
 }
 
 
 export const ProductReview = async (req, res, next) => {
     try {
-        const product =await productModel.findOne()
-        
+        const { comment, rating } = req.body;
+
+        const product = await productModel.findById(req.params.id);
+
+
+        const alredyReview = product.reviews.find((r) => r.user.toString() === req.user._id.toString());
+        if (alredyReview) {
+            return res.status(404).json({
+                success: false,
+                message: "You have already reviewed this product",
+            })
+        }
+        const review = {
+            name: req.user.name,
+            rating: Number(rating),
+            comment,
+            user: req.user._id
+        }
+        product.reviews.push(review)
+        product.numReviews = product.reviews.length
+        product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length
+        //save  
+        await product.save()
+        res.status(200).json({
+            success: true,
+            message: "Review Added!"
+        })
     } catch (error) {
         console.log("Error While product review", error);
-
+        if (error.name === "CastError") {
+            return res.status(500).send({
+                success: false,
+                message: "Invalid Id",
+            });
+        }
         res.status(500).json({
             success: false,
             message: 'Error  In product review Api'
-        })  
+        })
     }
 }
-  

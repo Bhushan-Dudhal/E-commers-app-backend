@@ -39,12 +39,14 @@ export const isAuth = async (req, res, next) => {
 export const isAdmin = async (req, res, next) => {
     try {
 
-        if (req.user.role !== 'admin') {
-            return res.status(404).json({
+
+        if (req.user.role !== "admin") {
+            return res.status(401).json({
                 status: false,
                 message: "You are not an admin",
             })
         }
+
 
         next()
     } catch (error) {
