@@ -15,7 +15,7 @@ export const getAllProduct = async (req, res, next) => {
                 $options: 'i',
             },
 
-            category:category?category:undefined
+            // category:category?category:
         }).populate("category")
         res.status(201).json({
             success: true,
@@ -35,6 +35,26 @@ export const getAllProduct = async (req, res, next) => {
 }
 
 
+export const TopProduct = async (req, res, next) => {
+    try {
+        const products = await productModel.find({}).sort({ rating: -1 }).limit(3)
+        
+        res.status(200).json({
+            success: true,
+            message: "Top 3 Products", 
+            products
+        })
+
+
+    } catch (error) {
+        console.log('Error While top product ', error);
+
+        res.status(500).json({
+            success: false,
+            message: 'Error  In top  product Api'
+        })
+    }
+}
 
 
 export const getSingleProduct = async (req, res,) => {
