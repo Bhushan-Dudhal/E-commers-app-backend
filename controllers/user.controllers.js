@@ -63,7 +63,7 @@ export const LoginPOST = async (req, res, next) => {
         }
 
         const token = jwt.sign({ _id: validUsr._id }, process.env.SECRET_KEY);
-        console.log(token);
+        
 
 
         res.status(201).cookie("token", token, {

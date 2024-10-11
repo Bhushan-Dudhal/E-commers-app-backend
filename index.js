@@ -12,9 +12,13 @@ import orderRoutes from "./routes/order.routes.js";
 config({ path: "./config/.env" });
 import cors from "cors"
 import Stripe from "stripe"
+import helmet from "helmet"
+import mongoSanitize from "express-mongo-sanitize";
 
 //MIddlewares
 database();
+app.use(helmet());
+app.use(mongoSanitize());
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors())
