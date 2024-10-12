@@ -342,3 +342,8 @@ export const ProductReview = async (req, res, next) => {
         })
     }
 }
+
+export const getReviews = async (req, res, next) => { }
+
+
+
