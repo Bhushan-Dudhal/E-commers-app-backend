@@ -10,7 +10,7 @@ export const getAllProduct = async (req, res, next) => {
     const { keyword, category } = req.query;
     try {
         const products = await productModel.find({
-            name:{
+            name: {
                 $regex: keyword ? keyword : '',
                 $options: 'i',
             },
@@ -38,10 +38,10 @@ export const getAllProduct = async (req, res, next) => {
 export const TopProduct = async (req, res, next) => {
     try {
         const products = await productModel.find({}).sort({ rating: -1 }).limit(3)
-        
+
         res.status(200).json({
             success: true,
-            message: "Top 3 Products", 
+            message: "Top 3 Products",
             products
         })
 

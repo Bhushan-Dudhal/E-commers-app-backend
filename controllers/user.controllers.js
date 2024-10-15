@@ -52,10 +52,12 @@ export const LoginPOST = async (req, res, next) => {
         }
 
         const validUsr = await userModel.findOne({ email })
-        
+
         if (!validUsr) {
-            return next(errorHandlers(400, "User Not Found"))
+            return res.status(404).json({ success: false, message: "User not found" });
         }
+
+
 
         const isMatch = bcryptjs.compareSync(password, validUsr.password)
         if (!isMatch) {
@@ -63,7 +65,7 @@ export const LoginPOST = async (req, res, next) => {
         }
 
         const token = jwt.sign({ _id: validUsr._id }, process.env.SECRET_KEY);
-        
+
 
 
         res.status(201).cookie("token", token, {
@@ -77,10 +79,11 @@ export const LoginPOST = async (req, res, next) => {
             validUsr
         })
     } catch (error) {
-        console.log(`Error While User Login ${error}`);
-
+        console.log(`Error While User Login`, error);
     }
+
 }
+
 
 export const UserProfile = async (req, res, next) => {
     console.log('welcome');
