@@ -47,6 +47,9 @@ export const RegisterPOST = async (req, res, next) => {
 export const LoginPOST = async (req, res, next) => {
     try {
         const { email, password } = req.body;
+
+        console.log(req.body);
+        
         if (!email || !password) {
             return next(errorHandlers(500, "Please Provide All Fields"));
         }
@@ -86,7 +89,7 @@ export const LoginPOST = async (req, res, next) => {
 
 
 export const UserProfile = async (req, res, next) => {
-    console.log('welcome');
+    console.log('get dada profiles call api');
 
     const { user } = req;
 
@@ -97,13 +100,28 @@ export const UserProfile = async (req, res, next) => {
 
 
 export const LogoutUser = (req, res) => {
-    console.log('hello');
+console.log("logout API CAll");
 
-    res.status(201).clearCookie("token")
-        .json({
-            success: true,
-            message: "User LogOut Successfully"
-        })
+    try {
+        res.status(200)
+            .cookie("token", "", {
+                expires: new Date(Date.now()),
+                secure: process.env.NODE_ENV === "development" ? true : false,
+                httpOnly: process.env.NODE_ENV === "development" ? true : false,
+                sameSite: process.env.NODE_ENV === "development" ? true : false,
+            })
+            .send({
+                success: true,
+                message: "Logout SUccessfully",
+            });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error In LOgout API",
+            error,
+        });
+    }
 }
 
 export const UpdateProfile = async (req, res) => {
