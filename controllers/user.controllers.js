@@ -89,13 +89,22 @@ export const LoginPOST = async (req, res, next) => {
 
 
 export const UserProfile = async (req, res, next) => {
-    console.log('get dada profiles call api');
-
-    const { user } = req;
-
-    const { password, ...rest } = user._doc;
-
-    res.status(201).json(rest)
+    try {
+        const user = await userModel.findById(req.user._id);
+        user.password = undefined;
+        res.status(200).send({
+            success: true,
+            message: "USer Prfolie Fetched Successfully",
+            user,
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send({
+            success: false,
+            message: "Error In PRofile API",
+            error,
+        });
+    }
 }
 
 
