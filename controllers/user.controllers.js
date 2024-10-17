@@ -95,7 +95,7 @@ export const UserProfile = async (req, res, next) => {
         res.status(200).send({
             success: true,
             message: "USer Prfolie Fetched Successfully",
-            user,
+            user
         });
     } catch (error) {
         console.log(error);
