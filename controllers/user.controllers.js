@@ -88,7 +88,11 @@ export const LoginPOST = async (req, res, next) => {
 }
 
 
-export const UserProfile = async (req, res, next) => {
+export const UserProfile = async (req, res) => {
+    console.log(req);
+    console.log("hello api call !!!!!!");
+    
+  
     try {
         const user = await userModel.findById(req.user._id);
         user.password = undefined;
@@ -109,7 +113,9 @@ export const UserProfile = async (req, res, next) => {
 
 
 export const LogoutUser = (req, res) => {
-console.log("logout API CAll");
+    console.log("logout API CAll");
+    console.log(req);
+    
 
     try {
         res.status(200)

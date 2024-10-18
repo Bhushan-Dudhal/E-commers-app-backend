@@ -5,32 +5,17 @@ import jwt from "jsonwebtoken";
 
 
 export const isAuth = async (req, res, next) => {
-    try {
-
-        const { token } = req.cookies;
-
-
-
-
-        if (!token) {
-            return next(errorHandlers(401, "You must be logged in to access this"));
-        }
-
-        const decode = jwt.verify(token, process.env.SECRET_KEY);
-
-        const user = await userModel.findById(decode._id)
-
-        if (!user) {
-            return next(errorHandlers(404, "Invalid Cookies id"))
-        }
-
-        req.user = user;
-
-        next()
-
-    } catch (error) {
-        console.log(`Error While use auth ${error}`);
+    const { token } = req.cookies;
+    //valdiation
+    if (!token) {
+        return res.status(401).send({
+            success: false,
+            message: "UnAuthorized User",
+        });
     }
+    const decodeData = jwt.verify(token, process.env.SECRET_key);
+    req.user = await userModel.findById(decodeData._id);
+    next();
 }
 
 //admin auth

@@ -23,7 +23,7 @@ routes.post("/register",limiter, RegisterPOST)
 routes.post("/login",limiter, LoginPOST)
 routes.get("/profile", isAuth, UserProfile)
 
-routes.get("/logoutt",isAuth,LogoutUser)
+routes.get("/logout",isAuth,LogoutUser)
 routes.put("/password", isAuth, LogoutUser)
 routes.put("/profile-up", isAuth, UpdateProfile)
 routes.put("/update-password", isAuth, UpdatePassword)
