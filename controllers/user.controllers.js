@@ -54,20 +54,20 @@ export const LoginPOST = async (req, res, next) => {
             return next(errorHandlers(500, "Please Provide All Fields"));
         }
 
-        const validUsr = await userModel.findOne({ email })
+        const user = await userModel.findOne({ email })
 
-        if (!validUsr) {
+        if (!user) {
             return res.status(404).json({ success: false, message: "User not found" });
         }
 
 
 
-        const isMatch = bcryptjs.compareSync(password, validUsr.password)
+        const isMatch = bcryptjs.compareSync(password, user.password)
         if (!isMatch) {
             return next(errorHandlers(400, "Invalid Password or Email"))
         }
 
-        const token = jwt.sign({ _id: validUsr._id }, process.env.SECRET_KEY);
+        const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
 
 
 
@@ -79,7 +79,7 @@ export const LoginPOST = async (req, res, next) => {
             success: true,
             message: "User Login Successfully ",
             token,
-            validUsr
+            user
         })
     } catch (error) {
         console.log(`Error While User Login`, error);
@@ -89,34 +89,19 @@ export const LoginPOST = async (req, res, next) => {
 
 
 export const UserProfile = async (req, res) => {
-    console.log(req);
-    console.log("hello api call !!!!!!");
-    
-  
-    try {
-        const user = await userModel.findById(req.user._id);
-        user.password = undefined;
-        res.status(200).send({
-            success: true,
-            message: "USer Prfolie Fetched Successfully",
-            user
-        });
-    } catch (error) {
-        console.log(error);
-        res.status(500).send({
-            success: false,
-            message: "Error In PRofile API",
-            error,
-        });
-    }
+   
+    const { user } = req;
+
+    const { password, ...rest } = user._doc; 
+    res.status(200).json({ success: true, message: "User Profile", user:rest})
+
+    // res.status(201).json(rest)
 }
 
 
 export const LogoutUser = (req, res) => {
     console.log("logout API CAll");
     console.log(req);
-    
-
     try {
         res.status(200)
             .cookie("token", "", {
@@ -124,8 +109,7 @@ export const LogoutUser = (req, res) => {
                 secure: process.env.NODE_ENV === "development" ? true : false,
                 httpOnly: process.env.NODE_ENV === "development" ? true : false,
                 sameSite: process.env.NODE_ENV === "development" ? true : false,
-            })
-            .send({
+            }).json({
                 success: true,
                 message: "Logout SUccessfully",
             });
@@ -153,7 +137,8 @@ export const UpdateProfile = async (req, res) => {
         await user.save();
         res.status(200).json({
             success: true,
-            message: "User Profile Updated "
+            message: "User Profile Updated ",
+            
         })
     } catch (error) {
         console.log(`Error While User upadte profile ${error}`);
