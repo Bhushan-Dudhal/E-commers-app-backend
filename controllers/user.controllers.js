@@ -67,10 +67,8 @@ export const LoginPOST = async (req, res, next) => {
             return next(errorHandlers(400, "Invalid Password or Email"))
         }
 
-        const token = jwt.sign({ _id: user._id }, process.env.SECRET_KEY);
-
-
-
+        const token = jwt.sign({ _id:user._id }, process.env.SECRET_KEY);
+    
         res.status(201).cookie("token", token, {
             httpOnly: true, maxAge: 7 * 24 * 60 * 60 * 1000, expiresIn: "7d",
             secure: process.env.NODE_ENV === "development" ? true : false,
@@ -83,6 +81,8 @@ export const LoginPOST = async (req, res, next) => {
         })
     } catch (error) {
         console.log(`Error While User Login`, error);
+        
+        
     }
 
 }

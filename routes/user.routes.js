@@ -21,7 +21,7 @@ const routes = express.Router();
 routes.post("/register",limiter, RegisterPOST)
 
 routes.post("/login",limiter, LoginPOST)
-routes.get("/profile", isAuth, UserProfile)
+routes.get("/profile",isAuth,  UserProfile)
 
 routes.get("/logout",isAuth,LogoutUser)
 routes.put("/password", isAuth, LogoutUser)

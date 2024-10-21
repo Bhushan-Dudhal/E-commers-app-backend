@@ -20,7 +20,7 @@ export const isAuth = async (req, res, next) => {
             return next(errorHandlers(404, "Invalid Cookies id"))
         }
 
-        req.user = user;
+        req.user=user;
         next()
 
     } catch (error) {
