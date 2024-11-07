@@ -6,9 +6,9 @@ import { productModel } from "../models/productModel.js";
 export const createOrder = async (req, res, next) => {
     try {
         const { shipingInfo, orderItems, paymentMethod, paymentInfo, itemPrice, tax, shippingCharges, totalAmout, orderStatus } = req.body;
-        // if (!shipingInfo || !orderItems || !paymentMethod || !paymentInfo || !itemPrice || tax || !shippingCharges ||!totalAmout||!orderStatus) {
-        //     return next(errorHandlers(404, "all filid is required"));
-        // }
+        if (!shipingInfo || !orderItems || !paymentMethod || !paymentInfo || !itemPrice || tax || !shippingCharges ||!totalAmout||!orderStatus) {
+            return next(errorHandlers(404, "all filid is required"));
+        }
         await orderModel.create({
             user: req.user._id,
             shipingInfo, orderItems, paymentMethod, paymentInfo, itemPrice, tax, shippingCharges, totalAmout, orderStatus
