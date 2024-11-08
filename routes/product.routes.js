@@ -28,6 +28,8 @@ productRoutes.delete("/delete-image/:id", isAuth,isAdmin, DeleteProductsImage)
 productRoutes.delete("/delete-product/:id", isAuth,isAdmin, DeleteProduct)
 
 productRoutes.put('/:id/review',isAuth,ProductReview)
+productRoutes.put('/:id/review',isAuth)
+
 
 
 
