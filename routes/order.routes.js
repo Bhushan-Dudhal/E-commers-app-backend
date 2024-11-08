@@ -24,7 +24,9 @@ orderRoutes.get("/admin/get-all-orders", isAdmin, getAllOrders);
 
 //change order status
 
-orderRoutes.put("/admin/order/:id", isAuth,isAdmin, ChangeOrderStatus)
+orderRoutes.put("/admin/order/:id", isAuth, isAdmin, ChangeOrderStatus)
+orderRoutes.put("/admin/order/:id",isAuth)
+
 
 
 
