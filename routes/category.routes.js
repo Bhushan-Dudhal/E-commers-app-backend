@@ -14,11 +14,4 @@ categoryRoutes.post("/create", isAuth,isAdmin,createCategory)
 categoryRoutes.get("/get-all", getAll)
 categoryRoutes.delete("/delete/:id", isAuth, isAdmin, DeleteCat) 
 categoryRoutes.put("/update/:id", isAuth, isAdmin, CategoryUpdate)
-categoryRoutes.put("/delete/:id", isAuth)
-
-
-
-
-
-
 export default categoryRoutes;
