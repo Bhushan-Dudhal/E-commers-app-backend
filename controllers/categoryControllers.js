@@ -40,7 +40,7 @@ export const getAll = async (req, res, next) => {
 
     } catch (error) {
 
-        console.log('Error While get category', error);
+        console.log(`Error While get category ${error}`);
     }
 }
 
