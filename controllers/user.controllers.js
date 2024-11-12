@@ -209,7 +209,7 @@ export const profilePicture = async (req, res, next) => {
             message: "Profile picture updated successfully"
         });
     } catch (error) {
-        console.error("Error while updating user photo:", error);
+        console.error(`Error while updating user photo: ${error}`);
         res.status(500).json({
             success: false,
             message: "An error occurred while updating the profile picture",
