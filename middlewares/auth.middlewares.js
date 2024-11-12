@@ -24,7 +24,7 @@ export const isAuth = async (req, res, next) => {
         next()
 
     } catch (error) {
-        console.log(`Error While User Authentication ${error}`);
+        console.log('Error While User Authentication',error);
 
     }
 }
