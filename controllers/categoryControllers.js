@@ -103,7 +103,7 @@ export const CategoryUpdate = async (req, res, next) => {
         }
         res.status(500).send({
             success: false,
-            message: "Error in DELETE CAT API",
+            message: "Error IN DELETE CAT API",
             error,
         });
     
