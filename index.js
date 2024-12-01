@@ -47,6 +47,7 @@ app.use("/api/order", orderRoutes)
 //Server
 app.use(errorMiddlewares)
 app.listen(process.env.PORT, () => {
-    console.log(`server is Running on http://localhost:${process.env.PORT}`);
+    console.log(`s
+        +erver is Running on http://localhost:${process.env.PORT}`);
 
 })
