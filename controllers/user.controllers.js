@@ -39,7 +39,7 @@ export const RegisterPOST = async (req, res, next) => {
         })
 
     } catch (error) {
-        console.log(`Error While user Registert ${error}`);
+        console.log(`error While user Registert ${error}`);
 
     }
 }
