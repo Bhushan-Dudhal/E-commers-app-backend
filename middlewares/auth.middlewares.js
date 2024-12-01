@@ -46,7 +46,7 @@ export const isAdmin = async (req, res, next) => {
 
         next()
     } catch (error) {
-        console.log(`Error While is Admin Auth ${error}`);
+        console.log(`error While is Admin Auth ${error}`);
 
     }
 }
